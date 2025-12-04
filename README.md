@@ -1,4 +1,4 @@
-# AERIS – Real-Time Mold Risk Monitoring Dashboard
+# Mold Prevention DashBoard
 
 AERIS is a prototype real-time monitoring system for indoor mold risk.  
 It ingests JSON messages from wireless sensor nodes (or emulators), stores them in a database, and visualizes system state and environmental risk in a web dashboard.
