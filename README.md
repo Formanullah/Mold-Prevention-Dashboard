@@ -385,7 +385,3 @@ These metrics can be documented in a separate report for coursework or research.
 - [ ] Integrate with real OpenThread network (nRF52840 dongle + RPi)  
 
 ---
-
-## 10. License
-
-_Add your license here (e.g., MIT, Apache 2.0, or “All rights reserved” depending on your course/project requirements)._
