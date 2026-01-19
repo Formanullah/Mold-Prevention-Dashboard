@@ -296,3 +296,61 @@ Streamlit will open a browser window (usually <http://localhost:8501>) with:
 - [ ] Integrate with real OpenThread network (nRF52840 dongle + RPi)  
 
 ---
+
+
+## Component view (flowchart)
+
+```mermaid
+flowchart LR
+  subgraph Edge
+    SN["Sensor Node<br/> (sensors)"]
+    DG["Data Generator<br/> (simulator)"]
+  end
+
+  subgraph Gateway_Server
+    SV["Server Node<br/> (collector/gateway)"]
+    PI["Pi - Data Logger<br/> (data_logger.py)"]
+  end
+
+  DB[(SQLite DB<br/>sensor_network.db)]
+  DASH["Streamlit Dashboard<br/> (dashboard.py)"]
+  User[(User)]
+
+  User --> DASH
+  SN --> SV
+  DG --> SV
+  SV --> PI
+  DG --> PI
+  PI --> DB
+  DASH --> DB
+
+  classDef logic fill:#f8f9fa,stroke:#333,stroke-width:1
+  class DASH logic
+```
+
+## Sequence view (reading flow)
+
+```mermaid
+sequenceDiagram
+  participant SN as Sensor Node
+  participant SV as Server Node
+  participant PI as Data Logger (Pi)
+  participant DB as SQLite DB
+  participant DASH as Streamlit Dashboard
+
+  SN->>SV: Send JSON reading / health / event
+  SV->>PI: Write JSON line to serial ([DATA]: {...})
+  PI->>PI: Parse JSON payload
+  alt Environmental reading
+    PI->>DB: INSERT INTO readings(...)
+  else Hardware health
+    PI->>DB: INSERT INTO device_health(...)
+  else System alert
+    PI->>DB: INSERT INTO system_alerts(...)
+  end
+  DASH->>DB: SELECT latest / history / alerts / health
+  DB-->>DASH: Return rows
+  DASH->>DASH: Run get_mold_case() -> Recommendation
+  DASH-->>User: Render UI (metrics, charts, recommendations)
+```
+
